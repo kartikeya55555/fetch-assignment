@@ -1,0 +1,55 @@
+openapi: 3.0.3
+info:
+  title: "fetch-assignment"
+  version: "1.0.0"
+paths:
+  /receipts/process:
+    post:
+      summary: Submits a receipt for processing.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Receipt"
+      responses:
+        '200':
+          description: OK
+  /receipts/{id}/points:
+    get:
+      summary: Returns the points awarded for the receipt.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+components:
+  schemas:
+    Receipt:
+      type: object
+      properties:
+        retailer:
+          type: string
+        purchaseDate:
+          type: string
+        purchaseTime:
+          type: string
+        total:
+          type: string
+        items:
+          type: array
+          items:
+            $ref: "#/components/schemas/Item"
+        points:
+          type: integer
+    Item:
+      type: object
+      properties:
+        shortDescription:
+          type: string
+        price:
+          type: string

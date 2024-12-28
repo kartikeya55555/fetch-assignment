@@ -1,0 +1,33 @@
+version: "3.8"
+
+services:
+  localstack:
+    image: localstack/localstack
+    container_name: localstack
+    ports:
+      - "4566:4566"    # LocalStack main port
+    environment:
+      - SERVICES=sqs,sns
+      - EDGE_PORT=4566
+      # Dummy creds for LocalStack
+      - AWS_ACCESS_KEY_ID=test
+      - AWS_SECRET_ACCESS_KEY=test
+      - DEFAULT_REGION=us-east-1
+
+  service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: fetch-assignment
+    depends_on:
+      localstack:
+        condition: service_healthy
+    environment:
+      - AWS_REGION=us-east-1
+      - AWS_ENDPOINT=http://localstack:4566
+      - AWS_ACCESS_KEY_ID=test
+      - AWS_SECRET_ACCESS_KEY=test
+      - SQS_QUEUE_NAME=receipt-queue
+      - SNS_TOPIC_NAME=receipt-topic
+    ports:
+      - "8080:8080"
