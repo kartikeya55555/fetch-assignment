@@ -120,7 +120,7 @@ func TestIntegration_ProcessAndGetReceiptPoints(t *testing.T) {
 			}
 			log.Println(" response after creating **", rr)
 			// 3) OPTIONAL: Sleep if you want to simulate time for the worker to (not) process
-			time.Sleep(2 * time.Second)
+			time.Sleep(10 * time.Second)
 
 			// 4) GET /receipts/{id}/points => expect some 404 or "doesn't exist" because worker isn't done or the data is invalid
 			getResp, getErr := http.Get(fmt.Sprintf("http://localhost:8080/receipts/%s/points", rr.ID))
